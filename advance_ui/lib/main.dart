@@ -21,9 +21,9 @@ class MyApp extends StatelessWidget {
         ? MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(useMaterial3: true),
-            home: androidHomePage(),
+            home: const androidHomePage(),
           )
-        : const CupertinoApp(
+        : CupertinoApp(
             debugShowCheckedModeBanner: false,
             home: iOSHomePage(),
           );

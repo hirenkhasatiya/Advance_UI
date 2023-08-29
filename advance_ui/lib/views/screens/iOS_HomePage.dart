@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class iOSHomePage extends StatelessWidget {
-  const iOSHomePage({super.key});
+  iOSHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text("iOS App"),
+        middle: const Text("iOS App"),
         trailing: Transform.scale(
           scale: 0.8,
           child: Consumer<platformcontroller>(
@@ -25,10 +25,73 @@ class iOSHomePage extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.only(top: 80, left: 20, right: 20),
+        padding: const EdgeInsets.only(top: 80, left: 20, right: 20),
         child: Center(
-          child: CupertinoActivityIndicator(
-            radius: 40,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CupertinoButton(
+                onPressed: () {
+                  showCupertinoModalPopup(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CupertinoActionSheet(
+                        title: const Text("Master in Flutter"),
+                        cancelButton: CupertinoButton(
+                          onPressed: () {},
+                          child: const Text('Cancel'),
+                        ),
+                        actions: [
+                          CupertinoButton(
+                              child: const Text("C Language"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              }),
+                          CupertinoButton(
+                              child: const Text("CPP Language"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              }),
+                          CupertinoButton(
+                              child: const Text("Figma"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              }),
+                          CupertinoButton(
+                              child: const Text("Core Flutter"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              }),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: const Text("Cupertino Action Sheet"),
+              ),
+              CupertinoContextMenu(
+                actions: const [
+                  CupertinoContextMenuAction(
+                    trailingIcon: Icons.favorite,
+                    child: Text('Favorite'),
+                  ),
+                  CupertinoContextMenuAction(
+                    trailingIcon: CupertinoIcons.add_circled,
+                    child: Text("Add"),
+                  ),
+                  CupertinoContextMenuAction(
+                    trailingIcon: CupertinoIcons.delete_solid,
+                    child: Text("Delete"),
+                  ),
+                  CupertinoContextMenuAction(
+                    trailingIcon: Icons.cancel_outlined,
+                    isDestructiveAction: true,
+                    child: Text("Cancel"),
+                  ),
+                ],
+                child: const Text("Cupertino Context Menu"),
+              )
+            ],
           ),
         ),
       ),
