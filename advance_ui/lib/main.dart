@@ -1,3 +1,4 @@
+import 'package:advance_ui/controller/dateTime_Controller.dart';
 import 'package:advance_ui/controller/platform_controller.dart';
 import 'package:advance_ui/views/screens/android_HomePage.dart';
 import 'package:advance_ui/views/screens/iOS_HomePage.dart';
@@ -6,10 +7,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => platformcontroller(),
-    child: const MyApp(),
-  ));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => platformcontroller(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => dateTimecontroller(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

@@ -1,3 +1,4 @@
+import 'package:advance_ui/controller/dateTime_Controller.dart';
 import 'package:advance_ui/controller/platform_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +91,40 @@ class iOSHomePage extends StatelessWidget {
                   ),
                 ],
                 child: const Text("Cupertino Context Menu"),
-              )
+              ),
+              CupertinoButton(
+                child: const Text("Date"),
+                onPressed: () {
+                  showCupertinoModalPopup(
+                    context: context,
+                    builder: (context) => CupertinoActionSheet(
+                      title: const Text("Select Date"),
+                      message: SizedBox(
+                        height: 200,
+                        child: CupertinoDatePicker(
+                          initialDateTime: Provider.of<dateTimecontroller>(
+                                      context,
+                                      listen: false)
+                                  .DT ??
+                              DateTime.now(),
+                          onDateTimeChanged: (date) {
+                            Provider.of<dateTimecontroller>(context,
+                                    listen: false)
+                                .dateTimeChange(dateTime: date);
+                          },
+                        ),
+                      ),
+                      cancelButton: CupertinoActionSheetAction(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("Cancel"),
+                        isDestructiveAction: true,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
