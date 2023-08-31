@@ -12,17 +12,12 @@ class iOSHomePage extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: const Text("iOS App"),
-        trailing: Transform.scale(
-          scale: 0.8,
-          child: Consumer<platformcontroller>(
-            builder: (context, Provider, child) {
-              return CupertinoSwitch(
-                  value: Provider.isandroid,
-                  onChanged: (val) {
-                    Provider.changePlatform();
-                  });
-            },
-          ),
+        trailing: GestureDetector(
+          onTap: () {
+            Provider.of<platformcontroller>(context, listen: false)
+                .changePlatform();
+          },
+          child: Icon(Icons.android_rounded),
         ),
       ),
       child: Padding(
@@ -31,6 +26,14 @@ class iOSHomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Consumer<dateTimecontroller>(builder: (context, Provider, child) {
+                return Text(
+                    "Time : ${Provider.TD!.hour % 12}:${Provider.TD!.minute}");
+              }),
+              Consumer<dateTimecontroller>(builder: (context, Provider, child) {
+                return Text(
+                    "Date : ${Provider.DT!.day}/${Provider.DT!.month}/${Provider.DT!.year}");
+              }),
               CupertinoButton(
                 onPressed: () {
                   showCupertinoModalPopup(
@@ -102,6 +105,7 @@ class iOSHomePage extends StatelessWidget {
                       message: SizedBox(
                         height: 200,
                         child: CupertinoDatePicker(
+                          mode: CupertinoDatePickerMode.date,
                           initialDateTime: Provider.of<dateTimecontroller>(
                                       context,
                                       listen: false)
@@ -111,6 +115,35 @@ class iOSHomePage extends StatelessWidget {
                             Provider.of<dateTimecontroller>(context,
                                     listen: false)
                                 .dateTimeChange(dateTime: date);
+                          },
+                        ),
+                      ),
+                      cancelButton: CupertinoActionSheetAction(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("Cancel"),
+                        isDestructiveAction: true,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              CupertinoButton(
+                child: const Text("Time"),
+                onPressed: () {
+                  showCupertinoModalPopup(
+                    context: context,
+                    builder: (context) => CupertinoActionSheet(
+                      title: const Text("Select Time"),
+                      message: SizedBox(
+                        height: 200,
+                        child: CupertinoDatePicker(
+                          mode: CupertinoDatePickerMode.time,
+                          onDateTimeChanged: (time) {
+                            Provider.of<dateTimecontroller>(context,
+                                    listen: false)
+                                .TimeChange(time: TimeOfDay.fromDateTime(time));
                           },
                         ),
                       ),

@@ -1,3 +1,4 @@
+import 'package:advance_ui/controller/dateTime_Controller.dart';
 import 'package:advance_ui/controller/platform_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,16 +13,12 @@ class androidHomePage extends StatelessWidget {
         title: const Text("Android"),
         centerTitle: true,
         actions: [
-          Transform.scale(
-            scale: 0.8,
-            child: Switch(
-              value: Provider.of<platformcontroller>(context).isandroid,
-              onChanged: (val) {
+          IconButton(
+              onPressed: () {
                 Provider.of<platformcontroller>(context, listen: false)
                     .changePlatform();
               },
-            ),
-          ),
+              icon: Icon(Icons.apple_outlined))
         ],
       ),
       body: Padding(
@@ -30,20 +27,74 @@ class androidHomePage extends StatelessWidget {
           child: Column(
             children: [
               Builder(builder: (context) {
-                return ElevatedButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                        barrierColor: Colors.blue.shade50.withOpacity(0.6),
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Container(
-                            height: 200,
-                            width: double.infinity,
-                            color: Colors.purple,
-                          );
-                        });
-                  },
-                  child: const Text("Modal Sheet Botton"),
+                return Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        showModalBottomSheet(
+                            barrierColor: Colors.blue.shade50.withOpacity(0.6),
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Container(
+                                height: 200,
+                                width: double.infinity,
+                                color: Colors.purple,
+                              );
+                            });
+                      },
+                      child: const Text("Modal Sheet Button"),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        DateTime? DT = await showDatePicker(
+                          context: context,
+                          initialDate: Provider.of<dateTimecontroller>(
+                                context,
+                              ).DT ??
+                              DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime.now().add(
+                            const Duration(days: 4),
+                          ),
+                        );
+                        if (DT != null) {
+                          Provider.of<dateTimecontroller>(context,
+                                  listen: false)
+                              .dateTimeChange(dateTime: DT);
+                        }
+                      },
+                      icon: Icon(Icons.date_range),
+                      label: const Text("Date"),
+                    ),
+                    Consumer<dateTimecontroller>(
+                        builder: (context, Provider, child) {
+                      return Text(
+                          "${Provider.DT!.day}/${Provider.DT!.month}/${Provider.DT!.year}");
+                    }),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        TimeOfDay? TD = await showTimePicker(
+                          context: context,
+                          initialTime: Provider.of<dateTimecontroller>(context,
+                                      listen: false)
+                                  .TD ??
+                              TimeOfDay.now(),
+                        );
+                        if (TD != null) {
+                          Provider.of<dateTimecontroller>(context,
+                                  listen: false)
+                              .TimeChange(time: TD);
+                        }
+                      },
+                      icon: Icon(Icons.watch_later_outlined),
+                      label: const Text("Time"),
+                    ),
+                    Consumer<dateTimecontroller>(
+                        builder: (context, Provider, child) {
+                      return Text(
+                          "${Provider.TD!.hour % 12}:${Provider.TD!.minute}");
+                    })
+                  ],
                 );
               }),
             ],
